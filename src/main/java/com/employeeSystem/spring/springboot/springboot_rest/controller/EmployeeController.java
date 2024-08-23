@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
@@ -16,14 +17,12 @@ public class EmployeeController {
 
     @GetMapping("/employees")
     public List<Employee> showAllEmployees() {
-        List<Employee> allEmployees = employeeService.getAllEmployees();
-        return allEmployees;
+        return employeeService.getAllEmployees();
     }
 
     @GetMapping("/employees/{id}")
-    public Employee getEmployee(@PathVariable int id) {
-        Employee employee = employeeService.getEmployee(id);
-        return employee;
+    public Optional<Employee> getEmployee(@PathVariable int id) {
+        return employeeService.getEmployee(id);
     }
 
     @PostMapping("/employees")
@@ -39,8 +38,8 @@ public class EmployeeController {
     }
 
     @DeleteMapping("/employees/{id}")
-    public Employee deleteEmployee(@PathVariable int id){
-        Employee employee = employeeService.getEmployee(id);
+    public Optional<Employee> deleteEmployee(@PathVariable int id){
+        Optional<Employee> employee = employeeService.getEmployee(id);
         employeeService.deleteEmployee(id);
         return employee;
     }
