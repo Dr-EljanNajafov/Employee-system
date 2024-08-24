@@ -1,5 +1,6 @@
 package com.employeeSystem.spring.springboot.springboot_rest.controller;
 
+import com.employeeSystem.spring.springboot.springboot_rest.dto.EmployeeDTO;
 import com.employeeSystem.spring.springboot.springboot_rest.entity.Employee;
 import com.employeeSystem.spring.springboot.springboot_rest.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,12 +17,12 @@ public class EmployeeController {
     private EmployeeService employeeService;
 
     @GetMapping("/employees")
-    public List<Employee> showAllEmployees() {
+    public List<EmployeeDTO> showAllEmployees() {
         return employeeService.getAllEmployees();
     }
 
     @GetMapping("/employees/{id}")
-    public Optional<Employee> getEmployee(@PathVariable int id) {
+    public Optional<EmployeeDTO> getEmployee(@PathVariable int id) {
         return employeeService.getEmployee(id);
     }
 
@@ -38,8 +39,8 @@ public class EmployeeController {
     }
 
     @DeleteMapping("/employees/{id}")
-    public Optional<Employee> deleteEmployee(@PathVariable int id){
-        Optional<Employee> employee = employeeService.getEmployee(id);
+    public Optional<EmployeeDTO> deleteEmployee(@PathVariable int id){
+        Optional<EmployeeDTO> employee = employeeService.getEmployee(id);
         employeeService.deleteEmployee(id);
         return employee;
     }
