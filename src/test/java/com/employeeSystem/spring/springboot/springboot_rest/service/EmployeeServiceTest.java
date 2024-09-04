@@ -1,6 +1,8 @@
 package com.employeeSystem.spring.springboot.springboot_rest.service;
 
 import com.employeeSystem.spring.springboot.springboot_rest.dao.EmployeeDAO;
+import com.employeeSystem.spring.springboot.springboot_rest.dto.EmployeeDTO;
+import com.employeeSystem.spring.springboot.springboot_rest.dto.EmployeeDTOMapper;
 import com.employeeSystem.spring.springboot.springboot_rest.entity.Employee;
 import com.employeeSystem.spring.springboot.springboot_rest.entity.Role;
 import com.employeeSystem.spring.springboot.springboot_rest.exception.ResourceNotFoundException;
@@ -12,8 +14,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -28,7 +30,8 @@ class EmployeeServiceTest {
 
     @Mock
     private EmployeeDAO employeeDAO;
-
+    @Mock
+    private EmployeeDTOMapper employeeDTOMapper;
     @InjectMocks
     private EmployeeServiceImpl employeeService;
 
@@ -48,9 +51,25 @@ class EmployeeServiceTest {
                 .build();
     }
 
-    @Disabled
+    @DisplayName("JUnit test for getAllEmployees method")
     @Test
-    void getAllEmployees() {
+    public void givenEmployeesList_whenGetAllEmployees_thenReturnEmployeesDTOList() {
+
+        // Create DTOs for the employees
+        EmployeeDTO employeeDTO = new EmployeeDTO(1, "XXX", "YYY", "IT");
+
+        // mock the mapping from Employee to EmployeeDTO
+        given(employeeDAO.findAll()).willReturn(List.of(employee));
+        given(employeeDTOMapper.apply(employee)).willReturn(employeeDTO);
+
+        // when - call the service method
+        List<EmployeeDTO> employeeDTOList = employeeService.getAllEmployees();
+
+        // then - assert that the list of employees is not null and contains the correct number of DTOs
+        assertThat(employeeDTOList).isNotNull();
+        assertThat(employeeDTOList.size()).isEqualTo(1);
+        List<EmployeeDTO> expectedList = List.of(employeeDTO);
+        assertThat(employeeDTOList.containsAll(expectedList) && expectedList.containsAll(employeeDTOList)).isTrue();
     }
 
     // JUnit test for saveEmployee method
@@ -95,9 +114,26 @@ class EmployeeServiceTest {
     }
 
 
-    @Disabled
+    // JUnit test for getEmployeeById method
+    @DisplayName("JUnit test for getEmployeeById method")
     @Test
-    void getEmployee() {
+    public void givenEmployeeId_whenGetEmployeeById_thenReturnEmployeeObject(){
+
+        EmployeeDTO employeeDTO = new EmployeeDTO(1, "XXX", "YYY", "IT");
+
+        // given - mock the DAO method to return a valid employee
+        given(employeeDAO.findById(1)).willReturn(Optional.of(employee));
+
+        // mock the mapping from Employee to EmployeeDTO
+        given(employeeDTOMapper.apply(employee)).willReturn(employeeDTO);
+
+        // when - call the service method
+        Optional<EmployeeDTO> retrievedEmployee = employeeService.getEmployee(employeeDTO.id());
+
+        // then - assert that the employee was found and is not null
+        assertThat(retrievedEmployee).isPresent();
+        assertThat(retrievedEmployee.get()).isNotNull();
+        assertThat(retrievedEmployee.get().name()).isEqualTo(employee.getName());
     }
 
     // JUnit test for deleteEmployee method
