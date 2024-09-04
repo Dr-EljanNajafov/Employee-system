@@ -20,8 +20,8 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
+import static org.mockito.BDDMockito.willDoNothing;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class EmployeeServiceTest {
@@ -100,8 +100,19 @@ class EmployeeServiceTest {
     void getEmployee() {
     }
 
-    @Disabled
+    // JUnit test for deleteEmployee method
+    @DisplayName("JUnit test for deleteEmployee method")
     @Test
-    void deleteEmployee() {
+    public void givenEmployeeId_whenDeleteEmployee_thenNothing(){
+        // given - precondition or setup
+        int employeeId = 1;
+
+        willDoNothing().given(employeeDAO).deleteById(employeeId);
+
+        // when -  action or the behaviour that we are going test
+        employeeService.deleteEmployee(employeeId);
+
+        // then - verify the output
+        verify(employeeDAO, times(1)).deleteById(employeeId);
     }
 }
