@@ -5,6 +5,7 @@ import com.employeeSystem.spring.springboot.springboot_rest.dao.EmployeeDAO;
 import com.employeeSystem.spring.springboot.springboot_rest.dto.EmployeeDTO;
 import com.employeeSystem.spring.springboot.springboot_rest.dto.EmployeeDTOMapper;
 import com.employeeSystem.spring.springboot.springboot_rest.entity.Employee;
+import com.employeeSystem.spring.springboot.springboot_rest.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,13 +17,13 @@ import java.util.stream.Collectors;
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
 
-    @Autowired
-    private EmployeeDAO employeeDAO;
+    private final EmployeeDAO employeeDAO;
 
     private final EmployeeDTOMapper employeeDTOMapper;
 
-    public EmployeeServiceImpl(EmployeeDTOMapper employeeDTOMapper) {
+    public EmployeeServiceImpl(EmployeeDTOMapper employeeDTOMapper, EmployeeDAO employeeDAO) {
         this.employeeDTOMapper = employeeDTOMapper;
+        this.employeeDAO = employeeDAO;
     }
 
 
@@ -37,8 +38,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     @Transactional
-    public void saveEmployee(Employee employee) {
-        employeeDAO.save(employee);
+    public Employee saveEmployee(Employee employee) throws ResourceNotFoundException {
+        Optional<Employee> savedEmployee = employeeDAO.findByEmail(employee.getEmail());
+        if(savedEmployee.isPresent()){
+            throw new ResourceNotFoundException("Employee already exist with given email:" + employee.getEmail());
+        }
+        return  employeeDAO.save(employee);
     }
 
     @Override

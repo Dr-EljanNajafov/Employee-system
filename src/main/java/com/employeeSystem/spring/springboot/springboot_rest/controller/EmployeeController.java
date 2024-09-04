@@ -2,6 +2,7 @@ package com.employeeSystem.spring.springboot.springboot_rest.controller;
 
 import com.employeeSystem.spring.springboot.springboot_rest.dto.EmployeeDTO;
 import com.employeeSystem.spring.springboot.springboot_rest.entity.Employee;
+import com.employeeSystem.spring.springboot.springboot_rest.exception.ResourceNotFoundException;
 import com.employeeSystem.spring.springboot.springboot_rest.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -27,13 +28,13 @@ public class EmployeeController {
     }
 
     @PostMapping("/employees")
-    public Employee addNewEmployee (@RequestBody Employee employee) {
+    public Employee addNewEmployee (@RequestBody Employee employee) throws ResourceNotFoundException {
         employeeService.saveEmployee(employee);
         return employee;
     }
 
     @PutMapping("/employees")
-    public Employee updateEmployee(@RequestBody Employee employee) {
+    public Employee updateEmployee(@RequestBody Employee employee) throws ResourceNotFoundException {
         employeeService.saveEmployee(employee);
         return employee;
     }
