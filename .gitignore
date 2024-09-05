@@ -3,7 +3,7 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
-out/artifacts/springboot_rest_jar/springboot_rest.jar
+/out/artifacts/springboot_rest_jar/springboot_rest.jar
 
 ### STS ###
 .apt_generated
