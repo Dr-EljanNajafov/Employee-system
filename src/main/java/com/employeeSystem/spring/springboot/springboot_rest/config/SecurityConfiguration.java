@@ -28,6 +28,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests()
                 .requestMatchers(new AntPathRequestMatcher("/api/auth/**"))
                 .permitAll()
+                .antMatchers("/api/employees/**").authenticated() // Authenticate Employee API
                 .anyRequest()
                 .authenticated()
                 .and()

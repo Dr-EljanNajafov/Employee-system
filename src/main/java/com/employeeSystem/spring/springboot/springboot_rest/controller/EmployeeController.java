@@ -11,35 +11,35 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/employees")
 public class EmployeeController {
 
     @Autowired
     private EmployeeService employeeService;
 
-    @GetMapping("/employees")
+    @GetMapping("/")
     public List<EmployeeDTO> showAllEmployees() {
         return employeeService.getAllEmployees();
     }
 
-    @GetMapping("/employees/{id}")
+    @GetMapping("/{id}")
     public Optional<EmployeeDTO> getEmployee(@PathVariable int id) {
         return employeeService.getEmployee(id);
     }
 
-    @PostMapping("/employees")
+    @PostMapping("/")
     public Employee addNewEmployee (@RequestBody Employee employee) throws ResourceNotFoundException {
         employeeService.saveEmployee(employee);
         return employee;
     }
 
-    @PutMapping("/employees")
+    @PutMapping("/")
     public Employee updateEmployee(@RequestBody Employee employee) throws ResourceNotFoundException {
         employeeService.saveEmployee(employee);
         return employee;
     }
 
-    @DeleteMapping("/employees/{id}")
+    @DeleteMapping("/{id}")
     public Optional<EmployeeDTO> deleteEmployee(@PathVariable int id){
         Optional<EmployeeDTO> employee = employeeService.getEmployee(id);
         employeeService.deleteEmployee(id);
