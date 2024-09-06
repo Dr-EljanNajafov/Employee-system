@@ -40,7 +40,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     @Transactional
-    public Employee saveEmployee(Employee employee) throws ResourceNotFoundException {
+    public Optional<EmployeeDTO> saveEmployee(Employee employee) throws ResourceNotFoundException {
         Optional<Employee> savedEmployee = employeeDAO.findByEmail(employee.getEmail());
         if(savedEmployee.isPresent()){
             throw new ResourceNotFoundException("Employee already exist with given email:" + employee.getEmail());
@@ -48,8 +48,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         // Шифруем пароль перед сохранением
         employee.setPassword(passwordEncoder.encode(employee.getPassword()));
-
-        return  employeeDAO.save(employee);
+        Employee addedEmployee = employeeDAO.save(employee);
+        return getEmployee(addedEmployee.getId());
     }
 
     @Override

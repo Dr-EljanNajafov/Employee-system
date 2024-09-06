@@ -14,6 +14,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.List;
 import java.util.Optional;
@@ -73,22 +74,20 @@ class EmployeeServiceTest {
     }
 
     // JUnit test for saveEmployee method
-    @DisplayName("JUnit test for saveEmployee method")
     @Test
     public void givenEmployeeObject_whenSaveEmployee_thenReturnEmployeeObject() throws ResourceNotFoundException {
         // given - precondition or setup
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();  // Инициализация
+        EmployeeServiceImpl employeeService = new EmployeeServiceImpl(employeeDTOMapper, employeeDAO, passwordEncoder);
+
         given(employeeDAO.findByEmail(employee.getEmail()))
                 .willReturn(Optional.empty());
 
         given(employeeDAO.save(employee)).willReturn(employee);
 
-        System.out.println(employeeDAO);
-        System.out.println(employeeService);
-
         // when -  action or the behaviour that we are going test
-        Employee savedEmployee = employeeService.saveEmployee(employee);
+        Optional<EmployeeDTO> savedEmployee = employeeService.saveEmployee(employee);
 
-        System.out.println(savedEmployee);
         // then - verify the output
         assertThat(savedEmployee).isNotNull();
     }

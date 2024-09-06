@@ -28,15 +28,17 @@ public class EmployeeController {
     }
 
     @PostMapping("/")
-    public Employee addNewEmployee (@RequestBody Employee employee) throws ResourceNotFoundException {
+    public Optional<EmployeeDTO> addNewEmployee (@RequestBody Employee employee) throws ResourceNotFoundException {
         employeeService.saveEmployee(employee);
-        return employee;
+        Optional<EmployeeDTO> addedEmployee = employeeService.getEmployee(employee.getId());
+        return addedEmployee;
     }
 
     @PutMapping("/")
-    public Employee updateEmployee(@RequestBody Employee employee) throws ResourceNotFoundException {
+    public Optional<EmployeeDTO> updateEmployee(@RequestBody Employee employee) throws ResourceNotFoundException {
         employeeService.updateEmployee(employee);
-        return employee;
+        Optional<EmployeeDTO> updatedEmployee = employeeService.getEmployee(employee.getId());
+        return updatedEmployee;
     }
 
     @DeleteMapping("/{id}")
