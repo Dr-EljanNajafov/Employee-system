@@ -35,7 +35,7 @@ public class EmployeeController {
 
     @PutMapping("/")
     public Employee updateEmployee(@RequestBody Employee employee) throws ResourceNotFoundException {
-        employeeService.saveEmployee(employee);
+        employeeService.updateEmployee(employee);
         return employee;
     }
 
