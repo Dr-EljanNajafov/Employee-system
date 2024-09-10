@@ -1,5 +1,6 @@
 package com.employeeSystem.spring.springboot.springboot_rest.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -31,6 +32,7 @@ public class Employee implements UserDetails {
     private String email;
     private String password;
 
+    @JsonIgnore // Ignore authorities in JSON serialization
     @Enumerated(EnumType.STRING)
     private Role role;
 
